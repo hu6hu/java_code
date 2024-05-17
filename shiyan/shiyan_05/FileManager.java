@@ -9,9 +9,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 class FileManager {
     private File file;
+    public FileManager(){}
     public FileManager(String filePath) {
         this.file = new File(filePath);
     }
@@ -113,28 +116,93 @@ class FileManager {
 //        return content.toString();
 //    }
 
-    // 文件和目录管理
-    public boolean createDirectory(String dirPath) {
-        File dir = new File(dirPath);
-        return dir.mkdir();
-    }
-
-    public boolean deleteFile() {
-        return file.delete();
-    }
-
-    public boolean deleteDirectory(String dirPath) {
-        File dir = new File(dirPath);
-        return dir.delete();
-    }
-
-    public String[] listFiles(String dirPath) {
-        File dir = new File(dirPath);
-        return dir.list();
-    }
-
     // 获取文件路径
     public String getFilePath() {
         return file.getAbsolutePath();
+    }
+
+
+    //目录
+    // 创建目录的方法
+    public boolean createDirectory(String dirPath) {
+        File dir = new File(dirPath);
+        if (dir.exists()) {
+            System.out.println("目录已存在: " + dirPath);
+            return false;
+        }
+        return dir.mkdir();
+    }
+
+    // 删除目录的方法
+    public boolean deleteDirectory(String dirPath) {
+        File dir = new File(dirPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            System.out.println("目录不存在或不是目录: " + dirPath);
+            return false;
+        }
+        return deleteDirectoryRecursively(dir);
+    }
+    // 递归删除目录内容的辅助方法
+    private boolean deleteDirectoryRecursively(File dir) {
+        File[] allContents = dir.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                if (!deleteDirectoryRecursively(file)) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+
+    // 在目录中创建文件的方法
+    public boolean createFile(String dirPath, String fileName) {
+        File dir = new File(dirPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            System.out.println("目录不存在或不是目录: " + dirPath);
+            return false;
+        }
+        File file = new File(dir, fileName);
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("创建文件时出错: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // 移动文件到目录的方法
+    public boolean moveFileToDirectory(String sourceFilePath, String destDirPath) {
+        File sourceFile = new File(sourceFilePath);
+        File destDir = new File(destDirPath);
+
+        if (!sourceFile.exists() || !sourceFile.isFile()) {
+            System.out.println( sourceFilePath+"不存在或不是文件: " );
+            return false;
+        }
+
+        if (!destDir.exists() || !destDir.isDirectory()) {
+            System.out.println(destDirPath+"目录不存在或不是目录: "  );
+            return false;
+        }
+
+        File destFile = new File(destDir, sourceFile.getName());
+        try {
+            Files.move(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException e) {
+            System.out.println("移动文件时出错: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // 列出目录中文件的方法
+    public String[] listFiles(String dirPath) {
+        File dir = new File(dirPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            System.out.println("目录不存在或不是目录: " + dirPath);
+            return null;
+        }
+        return dir.list();
     }
 }
