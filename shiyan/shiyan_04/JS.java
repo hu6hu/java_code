@@ -39,6 +39,7 @@ class JS extends JFrame implements ActionListener {
         menubar.add(menu3);
         //将设置好的菜单条放在窗口中
         this.setJMenuBar(menubar);
+
         this.setLayout(new BorderLayout());
 
         JPanel p1 = new JPanel();
