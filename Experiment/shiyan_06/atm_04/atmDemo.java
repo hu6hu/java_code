@@ -4,7 +4,7 @@ import javax.swing.*;
 public class atmDemo {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            aa atmSystem = new aa();
+           ATMSystem  atmSystem = new ATMSystem();
             atmSystem.setVisible(true);
         });
     }
