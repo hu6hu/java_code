@@ -1,4 +1,4 @@
-package test;
+package src.test;
 
 //分治法思想实现赛程问题
 

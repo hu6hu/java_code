@@ -1,8 +1,9 @@
 package test;
 
+//动态规划法求解矩阵相乘以及最小计算量
+
 import java.util.Scanner;
 
-//动态规划法求解矩阵相乘以及最小计算量
 class dontaiguihua {
     static int N = 100;
     static int[] p = new int[N];
