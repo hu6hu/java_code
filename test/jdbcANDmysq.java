@@ -9,7 +9,7 @@ import java.sql.SQLException;
  *
  * @author lloyd
  */
-public class test {
+public class jdbcANDmysq {
     public static void main(String[] args) {
         try {
             // 1.加载数据库驱动类
